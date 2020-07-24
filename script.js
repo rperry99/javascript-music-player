@@ -110,6 +110,20 @@ function setProgressBar(e) {
   music.currentTime = (clickX / width) * duration;
 }
 
+// Function for next song
+function nextSong() {
+  currentSong < songs.length - 1 ? currentSong++ : (currentSong = 0);
+  loadSong(songs[currentSong]);
+  playSong();
+}
+
+// function for previous song
+function previousSong() {
+  currentSong <= 0 ? (currentSong = songs.length - 1) : currentSong--;
+  loadSong(songs[currentSong]);
+  playSong();
+}
+
 // On Load - Select First Song
 loadSong(songs[currentSong]);
 
@@ -117,21 +131,16 @@ loadSong(songs[currentSong]);
 playBtn.addEventListener('click', () => (isPlaying ? pauseSong() : playSong()));
 
 // Skip event listener
-nextBtn.addEventListener('click', () => {
-  currentSong < songs.length - 1 ? currentSong++ : (currentSong = 0);
-  loadSong(songs[currentSong]);
-  playSong();
-});
+nextBtn.addEventListener('click', nextSong);
 
 // Previous event listener
-prevBtn.addEventListener('click', () => {
-  currentSong <= 0 ? (currentSong = songs.length - 1) : currentSong--;
-  loadSong(songs[currentSong]);
-  playSong();
-});
+prevBtn.addEventListener('click', previousSong);
 
 // Update progress bar
 music.addEventListener('timeupdate', updateProgress);
+
+// Play the next song when the song ends
+music.addEventListener('ended', nextSong);
 
 // Click on progress bar to search through the song
 progressContainer.addEventListener('click', setProgressBar);
