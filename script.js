@@ -3,6 +3,10 @@ const image = getElem('img');
 const title = getElem('#title');
 const artist = getElem('#artist');
 const music = getElem('audio');
+const progressContainer = getElem('#progress-container');
+const progress = getElem('#progress');
+const currentTimeEl = getElem('#current-time');
+const durationEl = getElem('#duration');
 const prevBtn = getElem('#prev');
 const playBtn = getElem('#play');
 const nextBtn = getElem('#next');
@@ -66,6 +70,38 @@ function loadSong(song) {
   image.src = `img/${song.name}.jpg`;
 }
 
+// Function to update progress
+function updateProgress(e) {
+  if (isPlaying) {
+    const { duration, currentTime } = e.srcElement;
+
+    // Update Progress Bar width
+    const progressPercent = (currentTime / duration) * 100;
+    progress.style.width = `${progressPercent}%`;
+
+    // Calculate Display for the duration
+    const durationMinutes = Math.floor(duration / 60);
+    let durationSeconds = Math.floor(duration % 60);
+    if (durationSeconds < 10) {
+      durationSeconds = `0${durationSeconds}`;
+    }
+
+    // Delay switching the duration element to avoid NaN
+    if (durationSeconds) {
+      durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
+    }
+
+    // Calculate Display for the current time
+    const currentMinutes = Math.floor(currentTime / 60);
+    let currentSeconds = Math.floor(currentTime % 60);
+    if (currentSeconds < 10) {
+      currentSeconds = `0${currentSeconds}`;
+    }
+
+    currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+  }
+}
+
 // On Load - Select First Song
 loadSong(songs[currentSong]);
 
@@ -85,3 +121,6 @@ prevBtn.addEventListener('click', () => {
   loadSong(songs[currentSong]);
   playSong();
 });
+
+// Update progress bar
+music.addEventListener('timeupdate', updateProgress);
