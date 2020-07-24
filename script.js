@@ -102,6 +102,14 @@ function updateProgress(e) {
   }
 }
 
+// Function to set the time of the song by clicking the progress bar
+function setProgressBar(e) {
+  const width = this.clientWidth;
+  const clickX = e.offsetX;
+  const { duration } = music;
+  music.currentTime = (clickX / width) * duration;
+}
+
 // On Load - Select First Song
 loadSong(songs[currentSong]);
 
@@ -124,3 +132,6 @@ prevBtn.addEventListener('click', () => {
 
 // Update progress bar
 music.addEventListener('timeupdate', updateProgress);
+
+// Click on progress bar to search through the song
+progressContainer.addEventListener('click', setProgressBar);
